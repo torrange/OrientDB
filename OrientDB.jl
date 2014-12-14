@@ -61,4 +61,38 @@ function document_update(connection_url, dbname, document, record_id)
 end
 
 
+function class_get(connection_url, dbname, class_name)
+  url = string(connection_url, "/class/", dbname, "/", class_name)
+  request = get(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
+function class_create(connection_url, dbname, class_name)
+  url = string(connection_url, "/class/", dbname, "/", class_name)
+  request = post(url)
+  response = { "status" => None }
+  if request.status == 201
+    response["status"] = "created"
+  else
+    response["status"] = "failed"
+  end
+  return response
+end
+
+
+function class_property_create(connection_url, dbname, class_name, property_name, property_type="String")
+  url = string(connection_url, "/property/", dbname, "/", class_name, "/", property_name,"/", property_type)
+  request = post(url)
+  response = { "status" => None }
+  if request.status == 201
+    response["status"] = "created"
+  else
+    response["status"] = "failed"
+  end
+  return request, response
+end
+
+
 end
