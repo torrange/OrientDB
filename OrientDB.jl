@@ -82,8 +82,8 @@ function class_create(connection_url, dbname, class_name)
 end
 
 
-function class_property_create(connection_url, dbname, class_name, property_name, property_type="String")
-  url = string(connection_url, "/property/", dbname, "/", class_name, "/", property_name,"/", property_type)
+function class_property_create(connection_url, dbname, class_name, property_name)
+  url = string(connection_url, "/property/", dbname, "/", class_name, "/", property_name)
   request = post(url)
   response = { "status" => None }
   if request.status == 201
