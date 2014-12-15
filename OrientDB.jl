@@ -147,4 +147,17 @@ function batch(connection_url, dbname, batch_job)
 end
 
 
+function function_execute(connection_url, dbname, function_name, arguments)
+  url = string(connection_url, "/function/", dbname, "/", function_name)
+  if length(arguments) > 0
+    for argument in arguments
+      url = string(url, "/", argument)
+    end
+  end
+  request = post(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
 end
