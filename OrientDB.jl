@@ -139,4 +139,12 @@ function query(connection_url, dbname, language, query_text, limit=20)
 end
 
 
+function batch(connection_url, dbname, batch_job)
+  url = string(connection_url, "/batch/", dbname)
+  request = post(url, json=batch_job)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
 end
