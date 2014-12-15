@@ -8,14 +8,14 @@ function create_connection(user, secret, server, port)
 end
 
 
-function get_database(connection_url, dbname)
+function database_get(connection_url, dbname)
   request = get(string(connection_url, "/database/", dbname))
   decoded = JSON.parse(request.data)
   return decoded
 end
 
 
-function connect_database(connection_url, dbname)
+function database_connect(connection_url, dbname)
   request = get(string(connection_url, "/connect/", dbname))
   response = { "status" => None }
   if request.status == 204
