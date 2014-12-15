@@ -187,4 +187,26 @@ function function_execute(connection_url, dbname, function_name, arguments)
 end
 
 
+function export_database(connection_url, dbname)
+  url = string(connection_url, "/export/", dbname, "/")
+  fname = string(dbname, ".gzip")
+  fw_io = open(fname, "w")
+  r = get(url)
+  response = {"status" => None}
+  try
+    write(fw_io, r.data)
+    close(fw_io)
+    response = {"status" => "success", "filename" => fname, "database" => dbname}
+  catch
+    response = {"status" => "failed","database" => dbname}
+  end
+  return response
+end
+
+
+
+
+
+
+
 end
