@@ -121,4 +121,22 @@ function cluster_get(connection_url, dbname, cluster_name)
 end
 
 
+function command(connection_url, dbname, language, command_text, limit=20)
+  url = string(connection_url, "/command/", dbname, "/", language, "/", command_text, "/", limit)
+  url = replace(url, " ", "%20")
+  request = post(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
+function query(connection_url, dbname, language, query_text, limit=20)
+  url = string(connection_url, "/query/", dbname, "/", language, "/", query_text, "/", limit)
+  url = replace(url, " ", "%20")
+  request = get(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
 end
