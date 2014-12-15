@@ -82,8 +82,11 @@ function class_create(connection_url, dbname, class_name)
 end
 
 
-function class_property_create(connection_url, dbname, class_name, property_name)
-  url = string(connection_url, "/property/", dbname, "/", class_name, "/", property_name)
+function class_property_create(connection_url, dbname, class_name, property_name, property_type=None)
+  if property_type == None
+    property_type = ""
+  end
+  url = string(connection_url, "/property/", dbname, "/", class_name, "/", property_name, "/", property_type)
   request = post(url)
   response = { "status" => None }
   if request.status == 201
@@ -91,7 +94,30 @@ function class_property_create(connection_url, dbname, class_name, property_name
   else
     response["status"] = "failed"
   end
-  return request, response
+  response["request"] = request
+  return response
+end
+
+
+function class_property_create_multiple(connection_url, dbname, class_name, properties)
+  url = string(connection_url, "/property/", dbname, "/", class_name, "/")
+  request = post(url, json=properties)
+  response = { "status" => None }
+  if request.status == 201
+    response["status"] = "created"
+  else
+    response["status"] = "failed"
+  end
+  response["request"] = request
+  return response
+end
+
+
+function cluster_get(connection_url, dbname, cluster_name)
+  url = string(connection_url, "/cluster/", dbname, "/", cluster_name)
+  request = get(url)
+  decoded = JSON.parse(request.data)
+  return decoded
 end
 
 
