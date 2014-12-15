@@ -2,21 +2,45 @@ module OrientDB
 using JSON, Requests
 
 
-function create_connection(user, secret, server, port)
+function connection_create(user, secret, server, port)
   connection_url = string("http://", user, ":", secret, "@", server,":", port)
   return connection_url
 end
 
 
 function database_get(connection_url, dbname)
-  request = get(string(connection_url, "/database/", dbname))
+  url = string(connection_url, "/database/", dbname)
+  request = get(url)
   decoded = JSON.parse(request.data)
   return decoded
 end
 
 
+function database_create(connection_url, dbname, dbtype)
+  url = string(connection_url, "/database/", dbname, "/", dbtype)
+  request = post(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
+function database_delete(connection_url, dbname)
+  url = string(connection_url, "/database/", dbname)
+  request = delete(url)
+  response = { "status" => None }
+  if request.status == 204
+    response["status"] = "deleted"
+  else
+    response["status"] = "failed"
+  end
+  response["request"] = request
+  return response
+end
+
+
 function database_connect(connection_url, dbname)
-  request = get(string(connection_url, "/connect/", dbname))
+  url = string(connection_url, "/connect/", dbname)
+  request = get(url)
   response = { "status" => None }
   if request.status == 204
     response["status"] = "connected"
@@ -28,21 +52,24 @@ end
 
 
 function document_create(connection_url, dbname, document)
-  request = post(string(connection_url, "/document/", dbname), json=document)
+  url = string(connection_url, "/document/", dbname)
+  request = post(url, json=document)
   decoded = JSON.parse(request.data)
   return decoded
 end
 
 
 function document_get(connection_url, dbname, record_id)
-  request = get(string(connection_url, "/document/", dbname, "/", record_id))
+  url = string(connection_url, "/document/", dbname, "/", record_id)
+  request = get(url)
   decoded = JSON.parse(request.data)
   return decoded
 end
 
 
 function document_check(connection_url, dbname, record_id)
-  request = head(string(connection_url, "/document/", dbname, "/", record_id))
+  url = string(connection_url, "/document/", dbname, "/", record_id)
+  request = head(url)
   response = { "status" => None }
   if request.status == 204
     response["status"] = "success"
