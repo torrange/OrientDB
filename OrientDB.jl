@@ -8,6 +8,43 @@ function connection_create(user, secret, server, port)
 end
 
 
+function connection_command(connection_url, command, id)
+  url = string(connection_url, "/connection/", command, "/", id)
+  request = post(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
+function server_get(connection_url)
+  url = string(connection_url, "/server")
+  request = get(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
+function server_disconnect(connection_url)
+  url = string(connection_url, "/connect/", dbname)
+  request = get(url)
+  response = { "status" => None }
+  if request.data == None
+    response["status"] = "disconnected"
+  else
+    response["status"] = "failed"
+  end
+  return response
+end
+
+
+function databases_list(connection_url)
+  url = string(connection_url, "/listDatabases")
+  request = get(url)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
 function database_get(connection_url, dbname)
   url = string(connection_url, "/database/", dbname)
   request = get(url)
@@ -191,7 +228,6 @@ function export_database(connection_url, dbname)
   url = string(connection_url, "/export/", dbname, "/")
   fname = string(dbname, ".gzip")
   fw_io = open(fname, "w")
-  r = get(url)
   response = {"status" => None}
   try
     write(fw_io, r.data)
@@ -202,11 +238,6 @@ function export_database(connection_url, dbname)
   end
   return response
 end
-
-
-
-
-
 
 
 end
