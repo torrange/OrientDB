@@ -1,1 +1,6 @@
+crm_dump.json
+jsonarray.json
 *.ipynb
+*.csv
+*.tsv
+*.json

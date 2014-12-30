@@ -194,7 +194,7 @@ function command(connection_url, dbname, language, command_text, limit=20)
 end
 
 
-function query(connection_url, dbname, language, query_text, limit=20)
+function query(connection_url, dbname, language, query_text, limit)
   url = string(connection_url, "/query/", dbname, "/", language, "/", query_text, "/", limit)
   url = replace(url, " ", "%20")
   request = get(url)
@@ -224,11 +224,21 @@ function function_execute(connection_url, dbname, function_name, arguments)
 end
 
 
+function import_database(connection_url, dbname, json_import)
+  url = string(connection_url, "/import/", dbname)
+  f = open(json_import)
+  request = post(url,json=json_import)
+  decoded = JSON.parse(request.data)
+  return decoded
+end
+
+
 function export_database(connection_url, dbname)
   url = string(connection_url, "/export/", dbname, "/")
   fname = string(dbname, ".gzip")
   fw_io = open(fname, "w")
   response = {"status" => None}
+  r = get(url)
   try
     write(fw_io, r.data)
     close(fw_io)
