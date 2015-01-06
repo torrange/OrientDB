@@ -2,10 +2,10 @@
 
 using Base, OrientDB, CSVTools
 
-user = "tobi";
-secret = "thermal2";
-server = "localhost";
-port = "2480";
+user = "";
+secret =  "";
+server =  "";
+port =  "";
 c = OrientDB.connection_create(user, secret, server, port)
 cobj = csv_read("bOnlineCRM_MongoExport.csv", ',')
 features = csv_head(cobj)
