@@ -7,7 +7,7 @@ secret =  "";
 server =  "";
 port =  "";
 c = OrientDB.connection_create(user, secret, server, port)
-cobj = csv_read("bOnlineCRM_MongoExport.csv", ',')
+cobj = csv_read("", ',')
 features = csv_head(cobj)
 data = csv_data(cobj)
 
